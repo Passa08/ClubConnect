@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ClubConnect - Sherubtse College</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Background Logo */
+    .background-logo {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      opacity: 0.1;
+      z-index: 1;
+      background-image: url('/img/logo.jpeg');
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      filter: brightness(0.8) contrast(0.8);
+    }
+
+    /* Header */
+    .header {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 40px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin-right: 20px;
+      border-radius: 50%;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .header-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #333;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 15px;
+    }
+
+    .nav-links a {
+      padding: 12px 24px;
+      background: linear-gradient(135deg, #0078d4, #005a9e);
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(0, 120, 212, 0.3);
+    }
+
+    .nav-links a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 120, 212, 0.4);
+    }
+
+    /* Main Content */
+    .main-content {
+      position: relative;
+      z-index: 10;
+      padding: 60px 40px;
+      min-height: calc(100vh - 100px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .hero-section {
+      max-width: 800px;
+      margin-bottom: 60px;
+    }
+
+    .hero-title {
+      font-size: 3.5em;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.3em;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 40px;
+      line-height: 1.6;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 20px rgba(40, 167, 69, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+    }
+
+    .btn-secondary {
+      padding: 16px 32px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      text-decoration: none;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: translateY(-3px);
+    }
+
+    /* Features Section */
+    .features-section {
+      position: relative;
+      z-index: 10;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-icon {
+      font-size: 3em;
+      margin-bottom: 20px;
+    }
+
+    .feature-title {
+      font-size: 1.5em;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+    }
+
+    .feature-description {
+      color: #666;
+      line-height: 1.6;
+    }
+
+    /* Stats Section */
+    .stats-section {
+      position: relative;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      margin: 40px 0;
+      max-width: 800px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 30px;
+    }
+
+    .stat-item {
+      text-align: center;
+      color: white;
+    }
+
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 1.1em;
+      opacity: 0.9;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5em;
+      }
+
+      .hero-subtitle {
+        font-size: 1.1em;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+
+      .background-logo {
+        width: 400px;
+        height: 400px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 2em;
+      }
+
+      .main-content {
+        padding: 40px 20px;
+      }
+
+      .header {
+        padding: 15px 20px;
+      }
+
+      .background-logo {
+        width: 300px;
+        height: 300px;
+      }
+    }
+
+    /* Animation */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-section,
+    .features-section,
+    .stats-section {
+      animation: fadeInUp 0.8s ease-out;
+    }
+
+    .feature-card {
+      animation: fadeInUp 0.8s ease-out;
+      animation-delay: calc(var(--animation-order) * 0.1s);
+    }
+  </style>
+</head>
+<body>
+  <!-- Background Logo -->
+  <div class="background-logo"></div>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-left">
+      <img src="/img/logo.jpeg" alt="Sherubtse College Logo" class="logo" />
+      <div class="header-title">ClubConnect</div>
+    </div>
+    <div class="nav-links">
+      <% if (user) { %>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/logout">Logout</a>
+      <% } else { %>
+        <a href="/login">Login</a>
+        <a href="/register">Register</a>
+      <% } %>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <div class="hero-section">
+      <h1 class="hero-title">Connect. Volunteer. Make a Difference.</h1>
+      <p class="hero-subtitle">
+        Join Sherubtse College's vibrant community of volunteers and discover meaningful opportunities 
+        to serve your community through our diverse clubs and campaigns.
+      </p>
+      <div class="cta-buttons">
+        <% if (user) { %>
+          <a href="/dashboard" class="btn-primary">Go to Dashboard</a>
+          <a href="/campaigns" class="btn-secondary">View Campaigns</a>
+        <% } else { %>
+          <a href="/register" class="btn-primary">Get Started</a>
+          <a href="/login" class="btn-secondary">Sign In</a>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="stats-section">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-number">10+</div>
+          <div class="stat-label">Active Clubs</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">50+</div>
+          <div class="stat-label">Volunteers</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">100+</div>
+          <div class="stat-label">Hours Served</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-number">15+</div>
+          <div class="stat-label">Campaigns</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="features-section">
+      <h2 style="text-align: center; color: white; font-size: 2.5em; margin-bottom: 40px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+        Why Choose ClubConnect?
+      </h2>
+      <div class="features-grid">
+        <div class="feature-card" style="--animation-order: 1;">
+          <div class="feature-icon">🏛️</div>
+          <h3 class="feature-title">Diverse Clubs</h3>
+          <p class="feature-description">
+            Join clubs like Rovers, Tarayana, YVIA, and more. Find your passion and make connections.
+          </p>
+        </div>
+        <div class="feature-card" style="--animation-order: 2;">
+          <div class="feature-icon">🎯</div>
+          <h3 class="feature-title">Easy Volunteering</h3>
+          <p class="feature-description">
+            One-click volunteer registration. Connect directly with club coordinators via WhatsApp.
+          </p>
+        </div>
+        <div class="feature-card" style="--animation-order: 3;">
+          <div class="feature-icon">🤝</div>
+          <h3 class="feature-title">Community Impact</h3>
+          <p class="feature-description">
+            Make a real difference in your community through meaningful volunteer opportunities.
+          </p>
+        </div>
+        <div class="feature-card" style="--animation-order: 4;">
+          <div class="feature-icon">📱</div>
+          <h3 class="feature-title">Instant Communication</h3>
+          <p class="feature-description">
+            Direct WhatsApp integration for seamless communication with club coordinators.
+          </p>
+        </div>
+        <div class="feature-card" style="--animation-order: 5;">
+          <div class="feature-icon">📊</div>
+          <h3 class="feature-title">Track Progress</h3>
+          <p class="feature-description">
+            Monitor your volunteer activities and see your impact in real-time.
+          </p>
+        </div>
+        <div class="feature-card" style="--animation-order: 6;">
+          <div class="feature-icon">🌟</div>
+          <h3 class="feature-title">Leadership Development</h3>
+          <p class="feature-description">
+            Develop leadership skills and gain valuable experience for your future career.
+          </p>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Add smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Add parallax effect to background logo
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      const backgroundLogo = document.querySelector('.background-logo');
+      backgroundLogo.style.transform = `translate(-50%, -50%) translateY(${scrolled * 0.5}px)`;
+    });
+  </script>
+</body>
+</html>

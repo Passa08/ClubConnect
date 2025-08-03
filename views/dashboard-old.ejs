@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+</head>
+<body>
+  <h1>Welcome, <%= user.name %> (Admin)</h1>
+
+  <a href="/">Home</a> | 
+  <a href="/logout">Logout</a>
+
+  <h2>Create New Campaign</h2>
+  <form action="/clubs/create-campaign" method="POST">
+    <label>Title:</label><br>
+    <input type="text" name="title" required><br>
+
+    <label>Description:</label><br>
+    <textarea name="description" required></textarea><br>
+
+    <label>Date:</label><br>
+    <input type="date" name="date" required><br>
+
+    <label>Club:</label><br>
+    <select name="clubId" required>
+      <% clubs.forEach(club => { %>
+        <option value="<%= club.id %>"><%= club.name %></option>
+      <% }) %>
+    </select><br><br>
+
+    <button type="submit">Create Campaign</button>
+  </form>
+
+  <h2>Your Club's Campaigns</h2>
+  <% if (campaigns.length === 0) { %>
+    <p>No campaigns found.</p>
+  <% } else { %>
+    <ul>
+      <% campaigns.forEach(c => { %>
+        <li>
+          <strong><%= c.title %></strong> - <%= c.date %><br>
+          <%= c.description %><br>
+          <% if (c.Club && c.Club.contact_whatsapp) { %>
+            WhatsApp: <a href="https://wa.me/<%= c.Club.contact_whatsapp %>?text=I'm interested in volunteering for <%= c.title %>">Link</a>
+          <% } else { %>
+            <em>No contact information available</em>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+  <% } %>
+</body>
+</html>

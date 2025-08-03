@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Member Dashboard - ClubConnect</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #0078d4;
+      padding: 15px 30px;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      margin-right: 15px;
+      border-radius: 50%;
+    }
+
+    .nav-links {
+      font-weight: 600;
+    }
+
+    .nav-links a {
+      margin-left: 15px;
+      padding: 8px 16px;
+      background-color: #0078d4;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      background-color: #005a9e;
+    }
+
+    .main-content {
+      padding: 30px;
+      background-color: #f5f5f5;
+      min-height: calc(100vh - 100px);
+    }
+
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .welcome-section {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .welcome-section h1 {
+      color: #0078d4;
+      margin-bottom: 10px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .stat-number {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #0078d4;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #666;
+      font-size: 14px;
+    }
+
+    .campaigns-section {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #0078d4;
+      padding-bottom: 15px;
+    }
+
+    .section-header h2 {
+      color: #0078d4;
+      margin: 0;
+    }
+
+    .filter-controls {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .campaigns-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .campaign-card {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 8px;
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .campaign-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+
+    .campaign-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+
+    .campaign-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #0078d4;
+      margin: 0;
+      flex: 1;
+    }
+
+    .campaign-date {
+      background-color: #0078d4;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .campaign-club {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .campaign-description {
+      color: #333;
+      line-height: 1.5;
+      margin-bottom: 15px;
+    }
+
+    .campaign-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-volunteer {
+      background-color: #28a745;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-volunteer:hover {
+      background-color: #218838;
+    }
+
+    .btn-whatsapp {
+      background-color: #25d366;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-whatsapp:hover {
+      background-color: #128c7e;
+    }
+
+    .btn-details {
+      background-color: #6c757d;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-details:hover {
+      background-color: #545b62;
+    }
+
+    .no-campaigns {
+      text-align: center;
+      padding: 40px;
+      color: #666;
+    }
+
+    .no-campaigns h3 {
+      color: #0078d4;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .campaigns-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .nav-links {
+        margin-top: 15px;
+      }
+      
+      .nav-links a {
+        margin: 5px;
+      }
+      
+      .filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <img src="/img/logo.jpeg" alt="Sherubtse College Logo" class="logo" />
+      <h2>ClubConnect - Sherubtse College</h2>
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/campaigns">All Campaigns</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="dashboard-container">
+      <div class="welcome-section">
+        <h1>Welcome, <%= user.name %>!</h1>
+        <p>Discover volunteer opportunities and make a difference in your community.</p>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number"><%= campaigns.length %></div>
+          <div class="stat-label">Active Campaigns</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number"><%= clubs.length %></div>
+          <div class="stat-label">Available Clubs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number"><%= user.role %></div>
+          <div class="stat-label">Your Role</div>
+        </div>
+      </div>
+
+      <div class="campaigns-section">
+        <div class="section-header">
+          <h2>Volunteer Opportunities</h2>
+          <div class="filter-controls">
+            <select class="filter-select" id="clubFilter">
+              <option value="">All Clubs</option>
+              <% clubs.forEach(club => { %>
+                <option value="<%= club.name %>"><%= club.name %></option>
+              <% }) %>
+            </select>
+            <select class="filter-select" id="dateFilter">
+              <option value="">All Dates</option>
+              <option value="today">Today</option>
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+            </select>
+          </div>
+        </div>
+
+        <% if (campaigns.length === 0) { %>
+          <div class="no-campaigns">
+            <h3>No campaigns available</h3>
+            <p>Check back later for new volunteer opportunities!</p>
+          </div>
+        <% } else { %>
+          <div class="campaigns-grid">
+            <% campaigns.forEach(campaign => { %>
+              <div class="campaign-card" data-club="<%= campaign.Club ? campaign.Club.name : '' %>" data-date="<%= campaign.date %>">
+                <div class="campaign-header">
+                  <h3 class="campaign-title"><%= campaign.title %></h3>
+                  <span class="campaign-date"><%= new Date(campaign.date).toLocaleDateString() %></span>
+                </div>
+                
+                <div class="campaign-club">
+                  <strong>Club:</strong> <%= campaign.Club ? campaign.Club.name : 'Unknown Club' %>
+                </div>
+                
+                <div class="campaign-description">
+                  <%= campaign.description %>
+                </div>
+                
+                <div class="campaign-actions">
+                  <a href="/campaigns/<%= campaign.id %>" class="btn-details">View Details</a>
+                  
+                  <% if (campaign.Club && campaign.Club.contact_whatsapp) { %>
+                    <a href="https://wa.me/<%= campaign.Club.contact_whatsapp %>?text=I'm interested in volunteering for <%= campaign.title %>" class="btn-whatsapp">
+                      📱 Contact
+                    </a>
+                  <% } %>
+                  
+                  <button class="btn-volunteer" onclick="volunteerForCampaign(<%= campaign.id %>)">
+                    🎯 Volunteer
+                  </button>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Filter functionality
+    document.getElementById('clubFilter').addEventListener('change', filterCampaigns);
+    document.getElementById('dateFilter').addEventListener('change', filterCampaigns);
+
+    function filterCampaigns() {
+      const clubFilter = document.getElementById('clubFilter').value;
+      const dateFilter = document.getElementById('dateFilter').value;
+      const campaignCards = document.querySelectorAll('.campaign-card');
+
+      campaignCards.forEach(card => {
+        const club = card.dataset.club;
+        const date = new Date(card.dataset.date);
+        const today = new Date();
+        
+        let showCard = true;
+
+        // Club filter
+        if (clubFilter && club !== clubFilter) {
+          showCard = false;
+        }
+
+        // Date filter
+        if (dateFilter) {
+          const diffTime = date - today;
+          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+          
+          if (dateFilter === 'today' && diffDays !== 0) {
+            showCard = false;
+          } else if (dateFilter === 'week' && (diffDays < 0 || diffDays > 7)) {
+            showCard = false;
+          } else if (dateFilter === 'month' && (diffDays < 0 || diffDays > 30)) {
+            showCard = false;
+          }
+        }
+
+        card.style.display = showCard ? 'block' : 'none';
+      });
+    }
+
+    function volunteerForCampaign(campaignId) {
+      // Show a prompt for optional message
+      const message = prompt('Add a message (optional):');
+      
+      // Send volunteer registration request
+      fetch(`/campaigns/${campaignId}/volunteer`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ message })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert('Thank you for volunteering! Your registration has been submitted.');
+          // Update the button to show registered status
+          const button = event.target;
+          button.textContent = '✅ Registered';
+          button.disabled = true;
+          button.style.backgroundColor = '#6c757d';
+        } else {
+          alert(data.error || 'Failed to register as volunteer. Please try again.');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        alert('Failed to register as volunteer. Please try again.');
+      });
+    }
+  </script>
+</body>
+</html> 

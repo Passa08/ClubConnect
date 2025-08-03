@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - ClubConnect</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 3px solid #0078d4;
+      padding: 15px 30px;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo {
+      width: 50px;
+      height: 50px;
+      margin-right: 15px;
+      border-radius: 50%;
+    }
+
+    .nav-links {
+      font-weight: 600;
+    }
+
+    .nav-links a {
+      margin-left: 15px;
+      padding: 8px 16px;
+      background-color: #0078d4;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .nav-links a:hover {
+      background-color: #005a9e;
+    }
+
+    .main-content {
+      padding: 30px;
+      background-color: #f5f5f5;
+      min-height: calc(100vh - 100px);
+    }
+
+    .dashboard-container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .welcome-section {
+      background-color: white;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    .welcome-section h1 {
+      color: #0078d4;
+      margin-bottom: 10px;
+    }
+
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      margin-bottom: 30px;
+    }
+
+    .dashboard-card {
+      background-color: white;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .dashboard-card h2 {
+      color: #0078d4;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #0078d4;
+      padding-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .btn-primary {
+      background-color: #0078d4;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .btn-primary:hover {
+      background-color: #005a9e;
+    }
+
+    .campaigns-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .campaign-item {
+      background-color: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 6px;
+      padding: 15px;
+      margin-bottom: 15px;
+    }
+
+    .campaign-title {
+      font-weight: bold;
+      color: #0078d4;
+      margin-bottom: 5px;
+    }
+
+    .campaign-date {
+      color: #666;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .campaign-description {
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .whatsapp-link {
+      display: inline-block;
+      background-color: #25d366;
+      color: white;
+      padding: 8px 15px;
+      text-decoration: none;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .whatsapp-link:hover {
+      background-color: #128c7e;
+    }
+
+    .no-contact {
+      color: #666;
+      font-style: italic;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .header {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .nav-links {
+        margin-top: 15px;
+      }
+      
+      .nav-links a {
+        margin: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="header-left">
+      <img src="/img/logo.jpeg" alt="Sherubtse College Logo" class="logo" />
+      <h2>ClubConnect - Sherubtse College</h2>
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/campaigns">View Campaigns</a>
+      <a href="/logout">Logout</a>
+    </div>
+  </header>
+
+  <main class="main-content">
+    <div class="dashboard-container">
+      <div class="welcome-section">
+        <h1>Welcome, <%= user.name %>!</h1>
+        <p>Manage your club campaigns and connect with volunteers through ClubConnect.</p>
+      </div>
+
+      <div class="dashboard-grid">
+        <div class="dashboard-card">
+          <h2>Create New Campaign</h2>
+          <form action="/clubs/create-campaign" method="POST">
+            <div class="form-group">
+              <label for="title">Campaign Title:</label>
+              <input type="text" id="title" name="title" placeholder="Enter campaign title" required>
+            </div>
+
+            <div class="form-group">
+              <label for="description">Description:</label>
+              <textarea id="description" name="description" placeholder="Describe your campaign" required></textarea>
+            </div>
+
+            <div class="form-group">
+              <label for="date">Date:</label>
+              <input type="date" id="date" name="date" required>
+            </div>
+
+            <div class="form-group">
+              <label for="clubId">Select Club:</label>
+              <select id="clubId" name="clubId" required>
+                <option value="">Choose a club</option>
+                <% clubs.forEach(club => { %>
+                  <option value="<%= club.id %>"><%= club.name %></option>
+                <% }) %>
+              </select>
+            </div>
+
+            <button type="submit" class="btn-primary">Create Campaign</button>
+          </form>
+        </div>
+
+        <div class="dashboard-card">
+          <h2>Quick Stats</h2>
+          <p><strong>Total Clubs:</strong> <%= clubs.length %></p>
+          <p><strong>Active Campaigns:</strong> <%= campaigns.length %></p>
+          <p><strong>Your Role:</strong> <%= user.role %></p>
+        </div>
+      </div>
+
+      <div class="dashboard-card full-width">
+        <h2>All Club Campaigns</h2>
+        <% if (campaigns.length === 0) { %>
+          <p>No campaigns found. Create your first campaign above!</p>
+        <% } else { %>
+          <ul class="campaigns-list">
+            <% campaigns.forEach(c => { %>
+              <li class="campaign-item">
+                <div class="campaign-title"><%= c.title %></div>
+                <div class="campaign-date">Date: <%= c.date %></div>
+                <div class="campaign-description"><%= c.description %></div>
+                <% if (c.Club && c.Club.contact_whatsapp) { %>
+                  <a href="https://wa.me/<%= c.Club.contact_whatsapp %>?text=I'm interested in volunteering for <%= c.title %>" class="whatsapp-link">
+                    📱 Contact <%= c.Club.name %> via WhatsApp
+                  </a>
+                <% } else { %>
+                  <span class="no-contact">No contact information available</span>
+                <% } %>
+              </li>
+            <% }) %>
+          </ul>
+        <% } %>
+      </div>
+
+      <div class="dashboard-card full-width">
+        <h2>Volunteer Management</h2>
+        <p>View and manage volunteer registrations for your campaigns.</p>
+        <a href="/admin/volunteers" class="btn-primary">View All Volunteers</a>
+      </div>
+    </div>
+  </main>
+</body>
+</html> 
