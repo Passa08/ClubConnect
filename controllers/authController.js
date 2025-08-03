@@ -112,14 +112,27 @@ exports.showLogin = (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
+  console.log('Login attempt for email:', email);
+
   try {
     const user = await User.findOne({ where: { email } });
-    if (!user) return res.send('User not found');
+    if (!user) {
+      console.log('❌ Login failed: User not found for email:', email);
+      return res.send('User not found');
+    }
+
+    console.log('✅ User found:', { id: user.id, name: user.name, role: user.role, isVerified: user.isVerified });
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.send('Incorrect password');
+    if (!isMatch) {
+      console.log('❌ Login failed: Incorrect password for user:', user.id);
+      return res.send('Incorrect password');
+    }
+
+    console.log('✅ Password verified for user:', user.id);
 
     if (!user.isVerified) {
+      console.log('❌ Login failed: Account not verified for user:', user.id);
       return res.send(`
         <h2>Account Not Verified</h2>
         <p>Please check your email and click the verification link to activate your account.</p>
@@ -129,8 +142,10 @@ exports.login = async (req, res) => {
 
     // Set user session
     req.session.userId = user.id;
+    console.log('✅ Login successful for user:', user.id);
     res.redirect('/dashboard');
   } catch (err) {
+    console.error('❌ Login error:', err);
     res.send('Login failed: ' + err.message);
   }
 };
