@@ -1,13 +1,23 @@
 const express = require('express');
 const router = express.Router();
 const clubController = require('../controllers/clubController');
+const User = require('../models/user');
 
 // Middleware to check if user is admin
-function isAdmin(req, res, next) {
-  if (req.session.user && req.session.user.role === 'admin') {
+async function isAdmin(req, res, next) {
+  if (!req.session.userId) {
+    return res.redirect('/login');
+  }
+  
+  try {
+    const user = await User.findByPk(req.session.userId);
+    if (!user || user.role !== 'admin') {
+      return res.redirect('/');
+    }
+    req.user = user; // Add user to request object
     next();
-  } else {
-    res.redirect('/');
+  } catch (err) {
+    res.redirect('/login');
   }
 }
 

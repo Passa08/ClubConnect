@@ -60,19 +60,50 @@ app.use('/', require('./routes/authRoutes'));
 app.use('/clubs', require('./routes/clubRoutes'));
 app.use('/campaigns', require('./routes/campaignRoutes'));
 
-// Sync database and start server
-db.sync()
-  .then(() => {
-    console.log('Database synced');
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch(err => {
-    console.error('Database sync failed:', err);
-  });
-
+// Home route
 app.get('/', (req, res) => {
   res.render('index', { user: req.session.user });
 });
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('❌ Application error:', err);
+  res.status(500).send('Something went wrong!');
+});
+
+// Start server with better error handling
+const startServer = async () => {
+  try {
+    console.log('🚀 Starting ClubConnect application...');
+    console.log('📊 Environment:', process.env.NODE_ENV || 'development');
+    console.log('🔗 Port:', process.env.PORT || 3000);
+    
+    // Sync database
+    await db.sync();
+    console.log('✅ Database synced successfully');
+    
+    // Start server
+    const PORT = process.env.PORT || 3000;
+    app.listen(PORT, () => {
+      console.log(`✅ Server running on http://localhost:${PORT}`);
+      console.log('🎉 ClubConnect is ready!');
+    });
+  } catch (error) {
+    console.error('❌ Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+// Handle uncaught exceptions
+process.on('uncaughtException', (err) => {
+  console.error('❌ Uncaught Exception:', err);
+  process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('❌ Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+});
+
+// Start the application
+startServer();
