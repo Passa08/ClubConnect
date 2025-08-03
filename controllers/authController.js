@@ -110,7 +110,8 @@ exports.showLogin = (req, res) => {
 exports.login = async (req, res) => {
   const { email, password } = req.body;
 
-  console.log('Login attempt for email:', email);
+  console.log('🔐 Login attempt for email:', email);
+  console.log('📊 Request body:', { email, password: password ? '[HIDDEN]' : 'undefined' });
 
   try {
     const user = await User.findOne({ where: { email } });
@@ -141,6 +142,7 @@ exports.login = async (req, res) => {
     // Set user session
     req.session.userId = user.id;
     console.log('✅ Login successful for user:', user.id);
+    console.log('🔄 Session userId set to:', req.session.userId);
     console.log('🔄 Redirecting to dashboard...');
     
     // Force session save before redirect
@@ -149,7 +151,9 @@ exports.login = async (req, res) => {
         console.error('❌ Session save error:', err);
         return res.send('Login failed: Session error');
       }
-      console.log('✅ Session saved, redirecting to /dashboard');
+      console.log('✅ Session saved successfully');
+      console.log('✅ Final session data:', { userId: req.session.userId });
+      console.log('🔄 Redirecting to /dashboard');
       res.redirect('/dashboard');
     });
   } catch (err) {
