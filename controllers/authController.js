@@ -43,6 +43,11 @@ exports.register = async (req, res) => {
 
     console.log('User created successfully:', user.id);
 
+    // Get the base URL for verification links
+    const baseUrl = process.env.BASE_URL || 
+                    process.env.RENDER_EXTERNAL_URL || 
+                    'http://localhost:3000';
+
     // Send verification email
     const emailSent = await sendVerificationEmail(email, verificationToken, name);
     
@@ -51,7 +56,7 @@ exports.register = async (req, res) => {
         <h2>Registration Successful!</h2>
         <p>Please check your email (${email}) and click the verification link to activate your account.</p>
         <p><strong>For testing:</strong> Click the verification link below:</p>
-        <p><a href="http://localhost:3000/verify/${verificationToken}" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">Verify Email</a></p>
+        <p><a href="${baseUrl}/verify/${verificationToken}" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">Verify Email</a></p>
         <p><a href="/login">Go to Login</a></p>
       `);
     } else {
