@@ -55,8 +55,6 @@ exports.register = async (req, res) => {
       res.send(`
         <h2>Registration Successful!</h2>
         <p>Please check your email (${email}) and click the verification link to activate your account.</p>
-        <p><strong>For testing:</strong> Click the verification link below:</p>
-        <p><a href="${baseUrl}/verify/${verificationToken}" style="background: #007bff; color: white; padding: 10px 20px; text-decoration: none; border-radius: 4px; display: inline-block;">Verify Email</a></p>
         <p><a href="/login">Go to Login</a></p>
       `);
     } else {
@@ -143,7 +141,17 @@ exports.login = async (req, res) => {
     // Set user session
     req.session.userId = user.id;
     console.log('✅ Login successful for user:', user.id);
-    res.redirect('/dashboard');
+    console.log('🔄 Redirecting to dashboard...');
+    
+    // Force session save before redirect
+    req.session.save((err) => {
+      if (err) {
+        console.error('❌ Session save error:', err);
+        return res.send('Login failed: Session error');
+      }
+      console.log('✅ Session saved, redirecting to /dashboard');
+      res.redirect('/dashboard');
+    });
   } catch (err) {
     console.error('❌ Login error:', err);
     res.send('Login failed: ' + err.message);
