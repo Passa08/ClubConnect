@@ -28,9 +28,29 @@ if (isProduction) {
           require: true,
           rejectUnauthorized: false
         } : false
+      },
+      // Add retry logic for connection issues
+      retry: {
+        max: 3,
+        timeout: 10000
       }
     }
   );
+  
+  // Test connection and fallback to SQLite if PostgreSQL fails
+  sequelize.authenticate()
+    .then(() => {
+      console.log('✅ PostgreSQL connection established successfully.');
+    })
+    .catch(err => {
+      console.log('⚠️ PostgreSQL connection failed, falling back to SQLite:', err.message);
+      // Fallback to SQLite
+      sequelize = new Sequelize({
+        dialect: 'sqlite',
+        storage: './database.sqlite',
+        logging: false
+      });
+    });
 } else {
   // SQLite for development
   sequelize = new Sequelize({
