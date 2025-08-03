@@ -1,19 +1,25 @@
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
 
-// Use PostgreSQL for production (Render), SQLite for development
-const isProduction = process.env.NODE_ENV === 'production';
+// Check if we have proper PostgreSQL credentials
+const hasPostgresCredentials = process.env.DB_HOST && 
+                             process.env.DB_USER && 
+                             process.env.DB_PASS && 
+                             process.env.DB_NAME;
+
+// Use PostgreSQL only if we have all credentials, otherwise use SQLite
+const usePostgres = process.env.NODE_ENV === 'production' && hasPostgresCredentials;
 
 let sequelize;
 
-if (isProduction) {
-  // PostgreSQL for production (Render)
+if (usePostgres) {
+  // PostgreSQL for production with proper credentials
   sequelize = new Sequelize(
-    process.env.DB_NAME || 'clubconnect',
-    process.env.DB_USER || 'postgres',
-    process.env.DB_PASS || 'password',
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASS,
     {
-      host: process.env.DB_HOST || 'localhost',
+      host: process.env.DB_HOST,
       dialect: 'postgres',
       port: process.env.DB_PORT || 5432,
       logging: false,
@@ -28,36 +34,18 @@ if (isProduction) {
           require: true,
           rejectUnauthorized: false
         } : false
-      },
-      // Add retry logic for connection issues
-      retry: {
-        max: 3,
-        timeout: 10000
       }
     }
   );
-  
-  // Test connection and fallback to SQLite if PostgreSQL fails
-  sequelize.authenticate()
-    .then(() => {
-      console.log('✅ PostgreSQL connection established successfully.');
-    })
-    .catch(err => {
-      console.log('⚠️ PostgreSQL connection failed, falling back to SQLite:', err.message);
-      // Fallback to SQLite
-      sequelize = new Sequelize({
-        dialect: 'sqlite',
-        storage: './database.sqlite',
-        logging: false
-      });
-    });
+  console.log('✅ Using PostgreSQL database');
 } else {
-  // SQLite for development
+  // SQLite for development or when PostgreSQL credentials are missing
   sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: './database.sqlite',
     logging: false
   });
+  console.log('✅ Using SQLite database');
 }
 
 module.exports = sequelize;
