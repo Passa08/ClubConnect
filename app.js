@@ -26,18 +26,31 @@ const sessionConfig = {
   }
 };
 
-// Use PostgreSQL session store in production, MemoryStore in development
-if (process.env.NODE_ENV === 'production') {
-  const pgSession = require('connect-pg-simple')(session);
-  sessionConfig.store = new pgSession({
-    conObject: {
-      connectionString: process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
-      ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
-    }
-  });
-  console.log('✅ Using PostgreSQL session store');
+// Check if we have complete PostgreSQL credentials for session store
+const hasCompletePostgresCredentials = 
+  process.env.DB_HOST && 
+  process.env.DB_USER && 
+  process.env.DB_PASS && 
+  process.env.DB_NAME &&
+  process.env.DB_HOST !== 'localhost' &&
+  process.env.DB_HOST !== '127.0.0.1';
+
+// Use PostgreSQL session store only if we have complete credentials
+if (process.env.NODE_ENV === 'production' && hasCompletePostgresCredentials) {
+  try {
+    const pgSession = require('connect-pg-simple')(session);
+    sessionConfig.store = new pgSession({
+      conObject: {
+        connectionString: process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+        ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+      }
+    });
+    console.log('✅ Using PostgreSQL session store');
+  } catch (error) {
+    console.log('⚠️ PostgreSQL session store failed, using MemoryStore:', error.message);
+  }
 } else {
-  console.log('✅ Using MemoryStore for sessions (development)');
+  console.log('✅ Using MemoryStore for sessions (PostgreSQL credentials incomplete)');
 }
 
 app.use(session(sessionConfig));
@@ -61,5 +74,5 @@ db.sync()
   });
 
 app.get('/', (req, res) => {
-    res.render('index', { user: req.session.user });
-  });
+  res.render('index', { user: req.session.user });
+});
